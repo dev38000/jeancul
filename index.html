@@ -19,6 +19,12 @@ body{min-height:100svh}
 .hero{min-height:100svh;display:grid;grid-template-rows:auto 1fr auto;position:relative;padding:20px;isolation:isolate}
 .top{display:flex;justify-content:space-between;align-items:center;font-size:12px;letter-spacing:.18em;text-transform:uppercase;z-index:4}
 .badge{border:1px solid #ffffff55;border-radius:999px;padding:8px 12px}
+.siteHeader{position:relative;z-index:6}
+.contract{display:flex;align-items:center;gap:10px;width:100%;margin-top:16px;padding:10px 12px;border:1px solid #ffdc3577;border-radius:7px;background:#ffdc3512;color:var(--fg);cursor:pointer;text-align:left}
+.contract:hover,.contract:focus-visible{border-color:var(--hot);outline:none}
+.contractLabel,.copyFeedback{flex:none;color:var(--hot);font-size:11px;font-weight:900;letter-spacing:.1em}
+.contract code{font:600 12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere;min-width:0}
+.copyFeedback{margin-left:auto;white-space:nowrap}
 .stage{display:grid;place-items:center;position:relative;min-height:70svh}
 .word{position:absolute;font-size:clamp(5rem,21vw,18rem);line-height:.75;letter-spacing:-.08em;opacity:.1;white-space:nowrap;z-index:-1;transform:rotate(-5deg)}
 .faceWrap{position:relative;width:min(88vw,690px);user-select:none;filter:drop-shadow(0 28px 35px #000)}
@@ -36,7 +42,7 @@ body{min-height:100svh}
 .counter{position:fixed;left:14px;bottom:14px;font-family:ui-monospace,monospace;font-size:11px;opacity:.55;z-index:10}
 .burst{position:fixed;pointer-events:none;z-index:100;font-size:clamp(2rem,8vw,6rem);font-weight:1000;animation:pop .7s ease-out forwards}
 @keyframes pop{from{opacity:1;transform:translate(-50%,-50%) scale(.2) rotate(-10deg)}to{opacity:0;transform:translate(-50%,-140%) scale(1.2) rotate(8deg)}}
-@media(max-width:620px){.hero{padding:14px}.bottom{align-items:stretch;flex-direction:column}.tg{width:100%}.hint{bottom:9%;right:0}.stage{min-height:66svh}.faceWrap{width:98vw}}
+@media(max-width:620px){.hero{padding:14px}.bottom{align-items:stretch;flex-direction:column}.tg{width:100%}.hint{bottom:9%;right:0}.stage{min-height:66svh}.faceWrap{width:98vw}.contract{align-items:flex-start;flex-wrap:wrap;gap:5px 10px}.contract code{order:3;width:100%}.copyFeedback{margin-left:auto}}
 @media(prefers-reduced-motion:reduce){.intro{display:none}}
 </style>
 </head>
@@ -45,7 +51,10 @@ body{min-height:100svh}
 <div class="intro"><img src="jeancul.png" alt=""><div class="flash"></div><div class="introTitle">JEANCUL</div></div>
 
 <main class="hero">
-  <div class="top"><span>$JEANCUL</span><span class="badge">NO ROADMAP · JUST CHIN</span></div>
+  <header class="siteHeader">
+    <div class="top"><span>$JEANCUL</span><span class="badge">NO ROADMAP · JUST CHIN</span></div>
+    <button class="contract" id="contract" type="button" aria-label="Copy token contract address"><span class="contractLabel">CA</span><code>8yyuxavUNEqB6Qa444n4cJrGvmfKWpfM4vz5qmP7pump</code><span class="copyFeedback" id="copyFeedback" aria-live="polite">COPY ↗</span></button>
+  </header>
   <section class="stage">
     <div class="word">JEANCUL</div>
     <div class="faceWrap" id="faceWrap">
@@ -67,6 +76,13 @@ const face=document.getElementById('face');
 const chin=document.getElementById('chin');
 const canvas=document.getElementById('chinCanvas');
 const countEl=document.getElementById('count');
+const contract=document.getElementById('contract');
+const copyFeedback=document.getElementById('copyFeedback');
+contract.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText('8yyuxavUNEqB6Qa444n4cJrGvmfKWpfM4vz5qmP7pump');copyFeedback.textContent='COPIED ✓'}
+  catch{copyFeedback.textContent='COPY FAILED'}
+  setTimeout(()=>copyFeedback.textContent='COPY ↗',1800);
+});
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 let dragging=false, startX=0, dragX=0, impulse=0, phase=0, slaps=0, lastFrame=0;
